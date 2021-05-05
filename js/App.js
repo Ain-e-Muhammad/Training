@@ -26,15 +26,30 @@ const getCountryData = function(country){
     request.open('GET', `https://restcountries.eu/rest/v2/name/${country}`)
     request.send()
     
+    //Rendering First Country
     request.addEventListener('load', function(){
-        const [data]=  JSON.parse(this.responseText);
-        console.log(data)
-        RenderHtml(data)
+      const [data]=  JSON.parse(this.responseText);
+      console.log(data)
+      RenderHtml(data)
+    //Rendering the first neighbour of that country
+      const neighbor = data.borders[0]
+      if(!neighbor)
+        return
+      const request2 = new XMLHttpRequest();
+      request2.open('GET', `https://restcountries.eu/rest/v2/alpha/${neighbor}`)
+      request2.send()
+      request2.addEventListener('load', function(){
+        const data2 = JSON.parse(this.responseText)
+        console.log(data2)
+        RenderHtml(data2, 'neighbour')
+      })
     });
+    
 }
 
-function RenderHtml(data){
-    const html = `<article class="country">
+//Render HTML code
+function RenderHtml(data, className='' ){
+    const html = `<article class="country ${className}">
     <img class="country__img" src="${data.flag}" />
     <div class="country__data">
       <h3 class="country__name">${data.name}</h3>
@@ -47,5 +62,5 @@ function RenderHtml(data){
     countriesContainer.insertAdjacentHTML('beforeend', html);
 }
 
-getCountryData('portugal');
+// getCountryData('portugal');
 getCountryData('pakistan');
