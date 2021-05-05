@@ -70,24 +70,32 @@
 
 //Promises
 const countriesContainer = document.querySelector('.countries')
+const btn = document.querySelector('.btn-country')
 const getCountryData = function(country){
   //Country 1
   fetch(`https://restcountries.eu/rest/v2/name/${country}`).then((res) => {
     // console.log(res)
     return res.json()
-  }).then((data) => { 
+  },
+  //Error Handling
+  (err) =>{
+    console.log("Error handling")
+  }
+  ).then((data) => {   
     // console.log(data)
     RenderHtml(data[0])
-    //Neighbor
+    //Neighbor country
     const neighbor = data[0].borders[0]
     return fetch(`https://restcountries.eu/rest/v2/name/${neighbor}`)
-  }).then((res) => {
+  }).then((res) => { // Chaining promises
     return res.json()
   }).then((data) => {
     RenderHtml(data[0], 'neighbour')
   })
 }
-getCountryData('pakistan')
+btn.addEventListener('click', () =>{
+  getCountryData('pakistan')
+})
 
 //Render HTML code
 function RenderHtml(data, className='' ){
