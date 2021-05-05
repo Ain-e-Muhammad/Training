@@ -71,12 +71,20 @@
 //Promises
 const countriesContainer = document.querySelector('.countries')
 const getCountryData = function(country){
+  //Country 1
   fetch(`https://restcountries.eu/rest/v2/name/${country}`).then((res) => {
     // console.log(res)
     return res.json()
   }).then((data) => { 
     // console.log(data)
     RenderHtml(data[0])
+    //Neighbor
+    const neighbor = data[0].borders[0]
+    return fetch(`https://restcountries.eu/rest/v2/name/${neighbor}`)
+  }).then((res) => {
+    return res.json()
+  }).then((data) => {
+    RenderHtml(data[0], 'neighbour')
   })
 }
 getCountryData('pakistan')
