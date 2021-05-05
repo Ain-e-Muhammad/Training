@@ -47,5 +47,5 @@ function RenderHtml(data){
     countriesContainer.insertAdjacentHTML('beforeend', html);
 }
 
-getCountryData('usa');
+getCountryData('portugal');
 getCountryData('pakistan');
