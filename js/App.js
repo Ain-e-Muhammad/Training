@@ -98,15 +98,38 @@ function RenderHtml(data, className='' ){
 // })
 
 
+
+
+
 //Async Promises
+const getPosition = async () => {
+  return new Promise( (resolve, reject) => {
+    // navigator.geolocation.getCurrentPosition(
+    // (pos) => {
+    //   resolve(pos)
+    // },
+    // (err) => {
+    //     reject(err)
+    //   }
+    // )
+    navigator.geolocation.getCurrentPosition(resolve,reject)
+  })
+}
+
 const countriesContainer = document.querySelector('.countries')
 const btn = document.querySelector('.btn-country')
 
-const whereAmI = async (country) => {
+const whereAmI = async () => {
   try{
-    const res = await fetch(`https://restcountries.eu/rest/v2/name/${country}`)
-  const data = await res.json()
-  RenderHtml(data[0])
+    //Getting GEO Location
+    const geo = await getPosition()
+    const {latitude: lat, longitude: long} = geo.coords
+    const loc = await fetch(`https://geocode.xyz/${lat}, ${long}?geoit=json`)
+    const locData = await loc.json()
+    //Getting Country Data
+    const res = await fetch(`https://restcountries.eu/rest/v2/name/${locData.country}`)
+    const data = await res.json()
+    RenderHtml(data[0])
   }
   catch(err){
     console.log(err)
@@ -114,5 +137,5 @@ const whereAmI = async (country) => {
 }
 
 btn.addEventListener('click', () =>{
-  whereAmI('pakistan')
+  whereAmI()
 })
