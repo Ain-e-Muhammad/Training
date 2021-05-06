@@ -130,6 +130,7 @@ const whereAmI = async () => {
     const res = await fetch(`https://restcountries.eu/rest/v2/name/${locData.country}`)
     const data = await res.json()
     RenderHtml(data[0])
+    return locData.city
   }
   catch(err){
     console.log(err)
@@ -137,5 +138,9 @@ const whereAmI = async () => {
 }
 
 btn.addEventListener('click', () =>{
-  whereAmI()
+  whereAmI().then( 
+    (city) => {
+      console.log(city)
+    }
+  )
 })
